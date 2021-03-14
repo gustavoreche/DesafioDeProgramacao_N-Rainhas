@@ -1,7 +1,8 @@
 package view;
 
+import model.ConfiguracoesDoTabuleiro;
+
 public interface View {
 	
-	int defineTamanhoDoTabuleiro();
-
+	ConfiguracoesDoTabuleiro defineConfiguracoesDoTabuleiro();
 }

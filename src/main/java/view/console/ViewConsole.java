@@ -2,41 +2,67 @@ package view.console;
 
 import java.util.Scanner;
 
+import exception.SaindoDoSistemaException;
+import model.ConfiguracoesDoTabuleiro;
 import view.View;
 
 public class ViewConsole implements View {
 
-	boolean caracterInvalido = false;
+	private Scanner digitacaoDoUsuario;
+	
+	private final String SAIR = "sair";
 	
 	@Override
-	public int defineTamanhoDoTabuleiro() {
+	public ConfiguracoesDoTabuleiro defineConfiguracoesDoTabuleiro() {
+		try {
+			System.out.println("BEM-VINDO!! Para sair, digite sair");
+			this.digitacaoDoUsuario = new Scanner(System.in);
+			int tamanhoDoTabuleiro = pegaTamanhoDoTabuleiro();
+			int quantidadeDeRainhas = pegaQuantidadeDeRainhas();
+			return new ConfiguracoesDoTabuleiro(tamanhoDoTabuleiro, quantidadeDeRainhas);			
+		} catch (SaindoDoSistemaException e) {
+			System.out.println("Você optou por sair, muito obrigado!");
+			return new ConfiguracoesDoTabuleiro(0, 0);
+		} 
+		finally {
+			this.digitacaoDoUsuario.close();
+		}
+	}
+
+	private int pegaTamanhoDoTabuleiro() {
 		int tamanhoDoTabuleiro = 0;
 		do {
-			tamanhoDoTabuleiro = pegaTamanho();
-		} while (this.caracterInvalido);
-		System.out.print("");
+			tamanhoDoTabuleiro = pegaValorInteiro("Digite o tamanho do tabuleiro: ");
+		} while (tamanhoDoTabuleiro == 0);
 		return tamanhoDoTabuleiro;
 	}
 
-	private int pegaTamanho() {
-		int tamanhoDoTabuleiro = 0;
-		boolean encerra = false;
-		Scanner tamanhoEscolhido = null;
+	private int pegaValorInteiro(String mensagem) {
+		int valor = 0;
+		String digitado = "";
 		try{
-			System.out.print("Digite o tamanho do tabuleiro: ");
-			tamanhoEscolhido = new Scanner(System.in);
-			tamanhoDoTabuleiro = Integer.parseInt(tamanhoEscolhido.nextLine());
-			this.caracterInvalido = false;
-			encerra = true;
+			System.out.print(mensagem);
+			digitado = this.digitacaoDoUsuario.nextLine();
+			valor = Integer.parseInt(digitado);
 		} catch (Exception e) {
+			saiDoSistema(digitado);
 			System.out.println("ERRO! Numero valido");
-			this.caracterInvalido = true;
-		} finally {
-			if(encerra) {
-				tamanhoEscolhido.close();				
-			}
+		} 
+		return valor;
+	}
+
+	private void saiDoSistema(String digitado) {
+		if(SAIR.equalsIgnoreCase(digitado)) {
+			throw new SaindoDoSistemaException();
 		}
-		return tamanhoDoTabuleiro;
+	}
+	
+	private int pegaQuantidadeDeRainhas() {
+		int quantidadeDeRainha = 0;
+		do {
+			quantidadeDeRainha = pegaValorInteiro("Digite a quantidade de rainhas: ");
+		} while (quantidadeDeRainha == 0);
+		return quantidadeDeRainha;
 	}
 
 }

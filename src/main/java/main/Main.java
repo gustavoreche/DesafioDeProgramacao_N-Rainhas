@@ -1,5 +1,6 @@
 package main;
 
+import model.ConfiguracoesDoTabuleiro;
 import view.View;
 import view.console.ViewConsole;
 
@@ -9,9 +10,10 @@ public class Main {
 		
 		View view = new ViewConsole();
 		
-		int tamanhoDoTabuleiro = view.defineTamanhoDoTabuleiro();
+		ConfiguracoesDoTabuleiro configuracoesDoTabuleiro = view.defineConfiguracoesDoTabuleiro();
 		
-		System.out.println();
+		System.out.println(configuracoesDoTabuleiro.getTamanhoDoTabuleiro()
+				+ " " + configuracoesDoTabuleiro.getQuantidadeDeRainhas());
 	}
 
 }
