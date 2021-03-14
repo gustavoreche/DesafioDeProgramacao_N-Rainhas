@@ -1,4 +1,4 @@
-package tabuleiro.infraestrutura.console.exception;
+package tabuleiro.infraestrutura.visualizacao.console.exception;
 
 public class SaindoDoSistemaException extends RuntimeException {
 

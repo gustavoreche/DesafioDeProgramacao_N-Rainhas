@@ -17,5 +17,12 @@ public class ConfiguracoesDoTabuleiro {
 	public int getQuantidadeDeRainhas() {
 		return quantidadeDeRainhas;
 	}
+
+	public boolean foiConfigurado() {
+		return this.tamanhoDoTabuleiro != 0 && this.quantidadeDeRainhas != 0;
+	}
 	
+	public void setQuantidadeDeRainhas(int quantidadeDeRainhas) {
+		this.quantidadeDeRainhas = quantidadeDeRainhas;
+	}
 }
