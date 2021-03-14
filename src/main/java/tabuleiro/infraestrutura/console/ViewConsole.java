@@ -1,10 +1,10 @@
-package view.console;
+package tabuleiro.infraestrutura.console;
 
 import java.util.Scanner;
 
-import exception.SaindoDoSistemaException;
-import model.ConfiguracoesDoTabuleiro;
-import view.View;
+import tabuleiro.aplicacao.View;
+import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
+import tabuleiro.infraestrutura.console.exception.SaindoDoSistemaException;
 
 public class ViewConsole implements View {
 

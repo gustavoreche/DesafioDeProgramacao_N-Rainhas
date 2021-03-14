@@ -1,6 +1,6 @@
-package view;
+package tabuleiro.aplicacao;
 
-import model.ConfiguracoesDoTabuleiro;
+import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 
 public interface View {
 	

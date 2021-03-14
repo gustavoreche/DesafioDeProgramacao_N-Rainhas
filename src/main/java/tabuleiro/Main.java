@@ -1,8 +1,9 @@
-package main;
+package tabuleiro;
 
-import model.ConfiguracoesDoTabuleiro;
-import view.View;
-import view.console.ViewConsole;
+
+import tabuleiro.aplicacao.View;
+import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
+import tabuleiro.infraestrutura.console.ViewConsole;
 
 public class Main {
 
