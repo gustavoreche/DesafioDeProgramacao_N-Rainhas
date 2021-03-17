@@ -16,6 +16,8 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	private int reiniciaTabuleiro = 0;
 	private int quantidadeMaximaVerificada = 0;
 	private boolean encerra = false;
+	private EspacoVazio espacoVazio = new EspacoVazio();
+	
 	private final int QUANTIDADE_DE_TENTATIVA = 50;
 
 	@Override
@@ -36,11 +38,11 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 				[this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro()];
 		int colunaInicial = new Random().nextInt(this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro() - 1);
 		int linhaInicial = new Random().nextInt(this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro() - 1);
-		EspacoVazio espacoVazio = new EspacoVazio(colunaInicial, linhaInicial);
+		EspacoVazio espacoVazio = this.espacoVazio.preencheEspacoVazio(colunaInicial, linhaInicial);
 		int numeroDeRainhas = 0;
 		do {
 			preencheOsCamposComAsRainhas(espacoVazio.getColuna(), espacoVazio.getLinha());
-			espacoVazio = verificaEspacosVazios();
+			espacoVazio = this.espacoVazio.verificaEspacosVazios(this.tabuleiroOcupado);
 			numeroDeRainhas++;
 		} while (espacoVazio.getColuna() != -1 && espacoVazio.getLinha() != -1 && 
 				this.configuracoesDoTabuleiro.getQuantidadeDeRainhas() > numeroDeRainhas);
@@ -110,16 +112,4 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 		}
 	}
 	
-	private EspacoVazio verificaEspacosVazios() {
-		for (int coluna = 0; coluna < this.tabuleiroOcupado.length; coluna++) {
-			for (int linha = 0; linha < this.tabuleiroOcupado.length; linha++) {
-				if(!"R".equalsIgnoreCase(tabuleiroOcupado[coluna][linha]) && 
-						!"-".equalsIgnoreCase(tabuleiroOcupado[coluna][linha])) {
-					return new EspacoVazio(coluna, linha);
-				}
-			}
-		}
-		return new EspacoVazio(-1, -1);
-	}
-
 }

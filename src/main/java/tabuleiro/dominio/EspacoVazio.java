@@ -10,12 +10,31 @@ public class EspacoVazio {
 		this.linha = linha;
 	}
 
+	public EspacoVazio() {
+	}
+
 	public int getColuna() {
 		return coluna;
 	}
 
 	public int getLinha() {
 		return linha;
+	}
+	
+	public EspacoVazio preencheEspacoVazio(int colunaInicial, int linhaInicial) {
+		return new EspacoVazio(colunaInicial, linhaInicial);
+	}
+	
+	public EspacoVazio verificaEspacosVazios(String [][] tabuleiroOcupado) {
+		for (int coluna = 0; coluna < tabuleiroOcupado.length; coluna++) {
+			for (int linha = 0; linha < tabuleiroOcupado.length; linha++) {
+				if(!"R".equalsIgnoreCase(tabuleiroOcupado[coluna][linha]) && 
+						!"-".equalsIgnoreCase(tabuleiroOcupado[coluna][linha])) {
+					return this.preencheEspacoVazio(coluna, linha);
+				}
+			}
+		}
+		return this.preencheEspacoVazio(-1, -1);
 	}
 	
 }

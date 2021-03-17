@@ -25,4 +25,5 @@ public class ConfiguracoesDoTabuleiro {
 	public void setQuantidadeDeRainhas(int quantidadeDeRainhas) {
 		this.quantidadeDeRainhas = quantidadeDeRainhas;
 	}
+
 }
