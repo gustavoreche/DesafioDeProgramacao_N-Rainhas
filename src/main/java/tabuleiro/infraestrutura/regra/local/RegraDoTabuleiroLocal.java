@@ -19,6 +19,8 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	private EspacoVazio espacoVazio = new EspacoVazio();
 	
 	private final int QUANTIDADE_DE_TENTATIVA = 50;
+	private final String SIMBOLO_RAINHA = "R";
+	private final String SIMBOLO_LOCAL_PROIBIDO = "-";
 
 	@Override
 	public String[][] cria(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro, View view) {
@@ -42,7 +44,7 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 		int numeroDeRainhas = 0;
 		do {
 			preencheOsCamposComAsRainhas(espacoVazio.getColuna(), espacoVazio.getLinha());
-			espacoVazio = this.espacoVazio.verificaEspacosVazios(this.tabuleiroOcupado);
+			espacoVazio = this.espacoVazio.verificaEspacosVazios(this.tabuleiroOcupado, SIMBOLO_RAINHA, SIMBOLO_LOCAL_PROIBIDO);
 			numeroDeRainhas++;
 		} while (espacoVazio.getColuna() != -1 && espacoVazio.getLinha() != -1 && 
 				this.configuracoesDoTabuleiro.getQuantidadeDeRainhas() > numeroDeRainhas);

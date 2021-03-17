@@ -25,11 +25,11 @@ public class EspacoVazio {
 		return new EspacoVazio(colunaInicial, linhaInicial);
 	}
 	
-	public EspacoVazio verificaEspacosVazios(String [][] tabuleiroOcupado) {
+	public EspacoVazio verificaEspacosVazios(String [][] tabuleiroOcupado, String simboloRainha, String simboloLocalProibido) {
 		for (int coluna = 0; coluna < tabuleiroOcupado.length; coluna++) {
 			for (int linha = 0; linha < tabuleiroOcupado.length; linha++) {
-				if(!"R".equalsIgnoreCase(tabuleiroOcupado[coluna][linha]) && 
-						!"-".equalsIgnoreCase(tabuleiroOcupado[coluna][linha])) {
+				if(!simboloRainha.equalsIgnoreCase(tabuleiroOcupado[coluna][linha]) && 
+						!simboloLocalProibido.equalsIgnoreCase(tabuleiroOcupado[coluna][linha])) {
 					return this.preencheEspacoVazio(coluna, linha);
 				}
 			}
