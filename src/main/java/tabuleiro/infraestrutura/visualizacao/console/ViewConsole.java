@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
+import tabuleiro.dominio.Tabuleiro;
 import tabuleiro.infraestrutura.visualizacao.console.exception.SaindoDoSistemaException;
 
 public class ViewConsole implements View {
@@ -11,10 +12,7 @@ public class ViewConsole implements View {
 	private Scanner digitacaoDoUsuario;
 	
 	private final String SAIR = "sair";
-	private final String RAINHA = "R";
-	private final String COM_RAINHA = "|R";
-	private final String PROIBIDO = "|-";
-	private final String SEM_RAINHA = "| ";
+	private final String DIVISAO_DO_TABULEIRO = "|";
 	
 	@Override
 	public ConfiguracoesDoTabuleiro defineConfiguracoesDoTabuleiro() {
@@ -73,27 +71,26 @@ public class ViewConsole implements View {
 	}
 
 	@Override
-	public void exibeTabuleiro(String[][] tabuleiro) {
-		if(tabuleiro.length > 1) {
+	public void exibeTabuleiro(Tabuleiro tabuleiro) {
+		if(tabuleiro.getTabuleiroPreenchido().length > 1) {
 			System.out.println("---------------------------------------");
 			System.out.println("Tabuleiro:");
-			for (int coluna = 0; coluna < tabuleiro.length; coluna++) {
-				for (int linha = 0; linha < tabuleiro.length; linha++) {
-					if(RAINHA.equalsIgnoreCase(tabuleiro[coluna][linha])) {
-						System.out.print(COM_RAINHA);
-					} else {
-						System.out.print(PROIBIDO);						
-					}
+			for (int coluna = 0; coluna < tabuleiro.getTabuleiroPreenchido().length; coluna++) {
+				for (int linha = 0; linha < tabuleiro.getTabuleiroPreenchido().length; linha++) {
+					System.out.print(DIVISAO_DO_TABULEIRO.concat(tabuleiro.getTabuleiroPreenchido()[coluna][linha]));						
 				}
-				System.out.println(SEM_RAINHA);
+				System.out.print(DIVISAO_DO_TABULEIRO);
+				System.out.println();
 			}
 		}
 	}
 
 	@Override
-	public void exibeMensagemDeNumeroDeTentativas(int tentativasMaximas) {
-		System.out.println("Numero de tentativas excedido. O maximo de rainhas que cabe nesse tabuleiro eh: "
-				+ tentativasMaximas);
+	public void informaSeTeveNumeroDeRainhasEmExcesso(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro) {
+		if(configuracoesDoTabuleiro.isNumeroDeRainhasExcedido()) {
+			System.out.println("Numero de tentativas excedido. O maximo de rainhas que cabe nesse tabuleiro eh: "
+					+ configuracoesDoTabuleiro.getQuantidadeDeRainhasSuportadoPeloTabuleiro());			
+		}
 	}
 
 }

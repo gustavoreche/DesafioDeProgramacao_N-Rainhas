@@ -3,19 +3,17 @@ package tabuleiro.infraestrutura.regra.local;
 import java.util.Random;
 
 import tabuleiro.aplicacao.regra.RegraDoTabuleiro;
-import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 import tabuleiro.dominio.EspacoVazio;
+import tabuleiro.dominio.Tabuleiro;
 
 public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	
 	private ConfiguracoesDoTabuleiro configuracoesDoTabuleiro;
-	private View view;
 	private String [][] tabuleiro;
 	private String [][] tabuleiroOcupado;
-	private int reiniciaTabuleiro = 0;
-	private int quantidadeMaximaVerificada = 0;
-	private boolean encerra = false;
+	private int vezesQueTabuleiroFoiReiniciado = 0;
+	private int quantidadeMaximaDeRainhasVerificada = 0;
 	private EspacoVazio espacoVazio = new EspacoVazio();
 	
 	private final int QUANTIDADE_DE_TENTATIVA = 50;
@@ -23,14 +21,13 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	private final String SIMBOLO_LOCAL_PROIBIDO = "-";
 
 	@Override
-	public String[][] cria(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro, View view) {
+	public Tabuleiro cria(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro) {
 		if(configuracoesDoTabuleiro.foiConfigurado()) {
 			this.configuracoesDoTabuleiro = configuracoesDoTabuleiro;
-			this.view = view;
 			iniciaPreenchimento();
-			return this.tabuleiro;
+			return new Tabuleiro(this.tabuleiro, configuracoesDoTabuleiro);
 		}
-		return new String[0][0];
+		return new Tabuleiro(new String[0][0], configuracoesDoTabuleiro);
 	}
 
 	private void iniciaPreenchimento() {
@@ -54,29 +51,24 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	}
 
 	private void verificaQuantidadeMaximaDeRainhas(int numeroDeRainhas) {
-		if(this.quantidadeMaximaVerificada < numeroDeRainhas) {
-			this.quantidadeMaximaVerificada = numeroDeRainhas;
+		if(this.quantidadeMaximaDeRainhasVerificada < numeroDeRainhas) {
+			this.quantidadeMaximaDeRainhasVerificada = numeroDeRainhas;
 		}
-		this.reiniciaTabuleiro++;
-		if(this.reiniciaTabuleiro < QUANTIDADE_DE_TENTATIVA) {
-			iniciaPreenchimento();				
-		} else if(this.encerra) {
-			this.view.exibeMensagemDeNumeroDeTentativas(this.quantidadeMaximaVerificada);
-		} else {
-			this.view.exibeMensagemDeNumeroDeTentativas(this.quantidadeMaximaVerificada);
-			this.reiniciaTabuleiro = 0;
-			this.configuracoesDoTabuleiro.setQuantidadeDeRainhas(this.quantidadeMaximaVerificada);
-			this.encerra = true;
-			iniciaPreenchimento();
+		this.vezesQueTabuleiroFoiReiniciado++;
+		if(this.vezesQueTabuleiroFoiReiniciado >= QUANTIDADE_DE_TENTATIVA) {
+			this.configuracoesDoTabuleiro.exibeMensagemDeNumeroDeRainhasExcedido(this.quantidadeMaximaDeRainhasVerificada);
+			this.vezesQueTabuleiroFoiReiniciado = 0;
+			this.configuracoesDoTabuleiro.redefineQuantidadeDeRainhas(this.quantidadeMaximaDeRainhasVerificada);
 		}
+		iniciaPreenchimento();
 	}
 
 	private void preencheOsCamposComAsRainhas(int colunaInicial, int linhaInicial) {
-		this.tabuleiro[colunaInicial][linhaInicial] = "R";
-		this.tabuleiroOcupado[colunaInicial][linhaInicial] = "R";
+		this.tabuleiro[colunaInicial][linhaInicial] = SIMBOLO_RAINHA;
+		this.tabuleiroOcupado[colunaInicial][linhaInicial] = SIMBOLO_RAINHA;
 		for (int tamanho = 0; tamanho < this.tabuleiro.length; tamanho++) {
-			this.tabuleiroOcupado[colunaInicial][tamanho] = "-";
-			this.tabuleiroOcupado[tamanho][linhaInicial] = "-";
+			this.tabuleiroOcupado[colunaInicial][tamanho] = SIMBOLO_LOCAL_PROIBIDO;
+			this.tabuleiroOcupado[tamanho][linhaInicial] = SIMBOLO_LOCAL_PROIBIDO;
 		}
 		verificaLadoEsquerdoESuperior(colunaInicial, linhaInicial);
 		verificaLadoEsquerdoEInferior(colunaInicial, linhaInicial);
@@ -86,7 +78,7 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 
 	private void verificaLadoEsquerdoESuperior(int colunaInicial, int linhaInicial) {
 		if(colunaInicial -1 >= 0 && linhaInicial -1 >= 0) {
-			this.tabuleiroOcupado[colunaInicial -1][linhaInicial -1] = "-";
+			this.tabuleiroOcupado[colunaInicial -1][linhaInicial -1] = SIMBOLO_LOCAL_PROIBIDO;
 			verificaLadoEsquerdoESuperior(colunaInicial -1, linhaInicial -1);
 		}
 	}
@@ -94,14 +86,14 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	private void verificaLadoEsquerdoEInferior(int colunaInicial, int linhaInicial) {
 		if(colunaInicial +1 <= this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro() -1 
 				&& linhaInicial -1 >= 0) {
-			this.tabuleiroOcupado[colunaInicial +1][linhaInicial -1] = "-";
+			this.tabuleiroOcupado[colunaInicial +1][linhaInicial -1] = SIMBOLO_LOCAL_PROIBIDO;
 			verificaLadoEsquerdoEInferior(colunaInicial +1, linhaInicial -1);
 		}
 	}
 	
 	private void verificaLadoDireitoESuperior(int colunaInicial, int linhaInicial) {
 		if(colunaInicial -1 >= 0 && linhaInicial +1 <= this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro() -1) {
-			this.tabuleiroOcupado[colunaInicial -1][linhaInicial +1] = "-";
+			this.tabuleiroOcupado[colunaInicial -1][linhaInicial +1] = SIMBOLO_LOCAL_PROIBIDO;
 			verificaLadoDireitoESuperior(colunaInicial -1, linhaInicial +1);
 		}
 	}
@@ -109,7 +101,7 @@ public class RegraDoTabuleiroLocal implements RegraDoTabuleiro {
 	private void verificaLadoDireitoEInferior(int colunaInicial, int linhaInicial) {
 		if(colunaInicial +1 <= configuracoesDoTabuleiro.getTamanhoDoTabuleiro() -1 
 				&& linhaInicial +1 <= this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro() -1) {
-			this.tabuleiroOcupado[colunaInicial +1][linhaInicial +1] = "-";
+			this.tabuleiroOcupado[colunaInicial +1][linhaInicial +1] = SIMBOLO_LOCAL_PROIBIDO;
 			verificaLadoDireitoEInferior(colunaInicial +1, linhaInicial +1);
 		}
 	}

@@ -1,10 +1,10 @@
 package tabuleiro.aplicacao.regra;
 
-import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
+import tabuleiro.dominio.Tabuleiro;
 
 public interface RegraDoTabuleiro {
 	
-	String[][] cria(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro, View view);
+	Tabuleiro cria(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro);
 
 }

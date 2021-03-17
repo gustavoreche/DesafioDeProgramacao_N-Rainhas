@@ -9,9 +9,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 import tabuleiro.dominio.EspacoVazio;
+import tabuleiro.dominio.Tabuleiro;
 
 public class RegraDoTabuleiroLocalTeste {
 	
@@ -23,9 +23,6 @@ public class RegraDoTabuleiroLocalTeste {
 
 	@Mock
 	private ConfiguracoesDoTabuleiro configuracoesDoTabuleiro;
-	
-	@Mock
-	private View view;
 	
 	private final int TAMANHO_DO_TABULEIRO = 4;
 	private final int QUANTIDADE_DE_RAINHA = 3;
@@ -39,10 +36,10 @@ public class RegraDoTabuleiroLocalTeste {
 	
 	@Test
 	public void cria_tabuleiroNaoConfigurado() {
-		String[][] tabuleiro = this.regraDoTabuleiroLocal
-				.cria(configuracoesDoTabuleiro, view);
+		Tabuleiro tabuleiro = this.regraDoTabuleiroLocal
+				.cria(configuracoesDoTabuleiro);
 		
-		Assert.assertEquals(0, tabuleiro.length);
+		Assert.assertEquals(0, tabuleiro.getTabuleiroPreenchido().length);
 	}
 	
 	@Test
@@ -55,10 +52,10 @@ public class RegraDoTabuleiroLocalTeste {
 		Mockito.when(this.configuracoesDoTabuleiro.getQuantidadeDeRainhas()).thenReturn(QUANTIDADE_DE_RAINHA);
 		Mockito.when(this.configuracoesDoTabuleiro.foiConfigurado()).thenReturn(true);
 		
-		String[][] tabuleiro = this.regraDoTabuleiroLocal
-				.cria(configuracoesDoTabuleiro, view);
+		Tabuleiro tabuleiro = this.regraDoTabuleiroLocal
+				.cria(configuracoesDoTabuleiro);
 		
-		Assert.assertEquals(TAMANHO_DO_TABULEIRO, (tabuleiro.length));
+		Assert.assertEquals(TAMANHO_DO_TABULEIRO, (tabuleiro.getTabuleiroPreenchido().length));
 	}
 	
 	@Test
@@ -78,10 +75,10 @@ public class RegraDoTabuleiroLocalTeste {
 		Mockito.when(this.configuracoesDoTabuleiro.getQuantidadeDeRainhas()).thenReturn(5);
 		Mockito.when(this.configuracoesDoTabuleiro.foiConfigurado()).thenReturn(true);
 		
-		String[][] tabuleiro = this.regraDoTabuleiroLocal
-				.cria(configuracoesDoTabuleiro, view);
+		Tabuleiro tabuleiro = this.regraDoTabuleiroLocal
+				.cria(configuracoesDoTabuleiro);
 		
-		Assert.assertEquals(TAMANHO_DO_TABULEIRO, (tabuleiro.length));
+		Assert.assertEquals(TAMANHO_DO_TABULEIRO, (tabuleiro.getTabuleiroPreenchido().length));
 	}
 
 }

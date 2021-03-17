@@ -4,6 +4,7 @@ package tabuleiro;
 import tabuleiro.aplicacao.regra.RegraDoTabuleiro;
 import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
+import tabuleiro.dominio.Tabuleiro;
 import tabuleiro.infraestrutura.regra.local.RegraDoTabuleiroLocal;
 import tabuleiro.infraestrutura.visualizacao.console.ViewConsole;
 
@@ -15,7 +16,8 @@ public class Main {
 		RegraDoTabuleiro regraDoTabuleiro = new RegraDoTabuleiroLocal();
 		
 		ConfiguracoesDoTabuleiro configuracoesDoTabuleiro = view.defineConfiguracoesDoTabuleiro();
-		String[][] tabuleiro = regraDoTabuleiro.cria(configuracoesDoTabuleiro, view);
+		Tabuleiro tabuleiro = regraDoTabuleiro.cria(configuracoesDoTabuleiro);
+		view.informaSeTeveNumeroDeRainhasEmExcesso(configuracoesDoTabuleiro);
 		view.exibeTabuleiro(tabuleiro);
 	}
 
