@@ -1,10 +1,9 @@
 package tabuleiro.infraestrutura.regra.local;
 
-import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -12,11 +11,19 @@ import org.mockito.MockitoAnnotations;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 import tabuleiro.dominio.EspacoVazio;
 import tabuleiro.dominio.Tabuleiro;
+import tabuleiro.infraestrutura.visualizacao.console.EntradaDoUsuario;
+import tabuleiro.infraestrutura.visualizacao.console.ViewConsole;
 
 public class RegraDoTabuleiroLocalTeste {
 	
 	@InjectMocks
 	private RegraDoTabuleiroLocal regraDoTabuleiroLocal = new RegraDoTabuleiroLocal();
+	
+	@InjectMocks
+	private ViewConsole view = new ViewConsole();
+	
+	@Mock
+	private EntradaDoUsuario entradaDoUsuario = new EntradaDoUsuario();
 	
 	@Mock
 	private EspacoVazio espacoVazio;
@@ -24,61 +31,71 @@ public class RegraDoTabuleiroLocalTeste {
 	@Mock
 	private ConfiguracoesDoTabuleiro configuracoesDoTabuleiro;
 	
-	private final int TAMANHO_DO_TABULEIRO = 4;
-	private final int QUANTIDADE_DE_RAINHA = 3;
-	private final int ESPACO_VAZIO_ENCONTRADO = 1;
-	private final int ESPACO_VAZIO_NAO_ENCONTRADO = -1;
+	@Mock
+	private Tabuleiro tabuleiro;
+	
+	private final String TAMANHO_DO_TABULEIRO_RECUSADO = "1";
+	private final String TAMANHO_DO_TABULEIRO = "4";
+
+	private final String QUANTIDADE_DE_RAINHA_RECUSADA = "1";
+	private final String QUANTIDADE_DE_RAINHA = "2";
+	
+	private final String SAIR_DO_SISTEMA = "sair";
+	
 	
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
 	
-	@Test
-	public void cria_tabuleiroNaoConfigurado() {
-		Tabuleiro tabuleiro = this.regraDoTabuleiroLocal
-				.cria(configuracoesDoTabuleiro);
-		
-		Assert.assertEquals(0, tabuleiro.getTabuleiroPreenchido().length);
+	@After
+	public void finish() {
+		System.out.println("---------------------------------------------------------");
 	}
 	
 	@Test
-	public void cria_tabuleiroConfigurado() {
-		EspacoVazio espacoVazio = Mockito.mock(EspacoVazio.class);
-		Mockito.when(this.espacoVazio.preencheEspacoVazio(Matchers.anyInt(), Matchers.anyInt())).thenReturn(espacoVazio);
-		Mockito.when(this.espacoVazio.verificaEspacosVazios(Matchers.any(String[][].class), Matchers.anyString(), Matchers.anyString()))
-			.thenReturn(espacoVazio);
-		Mockito.when(this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro()).thenReturn(TAMANHO_DO_TABULEIRO);
-		Mockito.when(this.configuracoesDoTabuleiro.getQuantidadeDeRainhas()).thenReturn(QUANTIDADE_DE_RAINHA);
-		Mockito.when(this.configuracoesDoTabuleiro.foiConfigurado()).thenReturn(true);
-		
-		Tabuleiro tabuleiro = this.regraDoTabuleiroLocal
-				.cria(configuracoesDoTabuleiro);
-		
-		Assert.assertEquals(TAMANHO_DO_TABULEIRO, (tabuleiro.getTabuleiroPreenchido().length));
-	}
-	
-	@Test
-	public void cria_tabuleiroConfigurado_numeroDeRainhasEhMenorQueOEscolhido() {
-		EspacoVazio espacoVazioPrimeiroRetorno = Mockito.mock(EspacoVazio.class);
-		EspacoVazio espacoVazioSegundoRetorno = Mockito.mock(EspacoVazio.class);
-		
-		Mockito.when(espacoVazioPrimeiroRetorno.getColuna()).thenReturn(ESPACO_VAZIO_ENCONTRADO);
-		Mockito.when(espacoVazioPrimeiroRetorno.getLinha()).thenReturn(ESPACO_VAZIO_ENCONTRADO);
-		Mockito.when(espacoVazioSegundoRetorno.getColuna()).thenReturn(ESPACO_VAZIO_NAO_ENCONTRADO);
-		Mockito.when(espacoVazioSegundoRetorno.getLinha()).thenReturn(ESPACO_VAZIO_NAO_ENCONTRADO);
-		
-		Mockito.when(this.espacoVazio.preencheEspacoVazio(Matchers.anyInt(), Matchers.anyInt())).thenReturn(espacoVazioPrimeiroRetorno);
-		Mockito.when(this.espacoVazio.verificaEspacosVazios(Matchers.any(String[][].class), Matchers.anyString(), Matchers.anyString()))
-			.thenReturn(espacoVazioPrimeiroRetorno, espacoVazioSegundoRetorno, espacoVazioPrimeiroRetorno);
-		Mockito.when(this.configuracoesDoTabuleiro.getTamanhoDoTabuleiro()).thenReturn(TAMANHO_DO_TABULEIRO);
-		Mockito.when(this.configuracoesDoTabuleiro.getQuantidadeDeRainhas()).thenReturn(5);
-		Mockito.when(this.configuracoesDoTabuleiro.foiConfigurado()).thenReturn(true);
-		
-		Tabuleiro tabuleiro = this.regraDoTabuleiroLocal
-				.cria(configuracoesDoTabuleiro);
-		
-		Assert.assertEquals(TAMANHO_DO_TABULEIRO, (tabuleiro.getTabuleiroPreenchido().length));
+	public void fluxoComTamanhoDoTabuleiroInvalido_devePedirNovamenteEConfigurar() {
+		Mockito.when(this.entradaDoUsuario.executa())
+			.thenReturn(TAMANHO_DO_TABULEIRO_RECUSADO, TAMANHO_DO_TABULEIRO,
+					QUANTIDADE_DE_RAINHA);
+		fluxoDoSistema();
 	}
 
+	private void fluxoDoSistema() {
+		ConfiguracoesDoTabuleiro configuracoesDoTabuleiro = view.defineConfiguracoesDoTabuleiro();
+		Tabuleiro tabuleiro = new RegraDoTabuleiroLocal().cria(configuracoesDoTabuleiro);
+		view.informaSeTeveNumeroDeRainhasEmExcesso(configuracoesDoTabuleiro);
+		view.exibeTabuleiro(tabuleiro);
+	}
+	
+	@Test
+	public void fluxoComQuantidadeDeRainhasInvalidas_devePedirNovamenteEConfigurar() {
+		Mockito.when(this.entradaDoUsuario.executa())
+			.thenReturn(TAMANHO_DO_TABULEIRO,
+					QUANTIDADE_DE_RAINHA_RECUSADA, QUANTIDADE_DE_RAINHA);
+		fluxoDoSistema();
+	}
+	
+	@Test
+	public void fluxoComTamanhoDoTabuleiroInvalidoEQuantidadeDeRainhasInvalidas_devePedirNovamenteOsDoisItensEConfigurar() {
+		Mockito.when(this.entradaDoUsuario.executa())
+			.thenReturn(TAMANHO_DO_TABULEIRO_RECUSADO, TAMANHO_DO_TABULEIRO,
+					QUANTIDADE_DE_RAINHA_RECUSADA, QUANTIDADE_DE_RAINHA);
+		fluxoDoSistema();
+	}
+	
+	@Test
+	public void fluxoDesejandoSairNaPerguntaDoTamanhoDoTabuleiro_deveEncerrarOSistema() {
+		Mockito.when(this.entradaDoUsuario.executa())
+			.thenReturn(SAIR_DO_SISTEMA);
+		fluxoDoSistema();
+	}
+	
+	@Test
+	public void fluxoDesejandoSairNaPerguntaDaQuantidadeDeRainhas_deveEncerrarOSistema() {
+		Mockito.when(this.entradaDoUsuario.executa())
+			.thenReturn(TAMANHO_DO_TABULEIRO, SAIR_DO_SISTEMA);
+		fluxoDoSistema();
+	}
+	
 }

@@ -3,12 +3,10 @@ package tabuleiro.dominio;
 public class Tabuleiro {
 	
 	private String[][] tabuleiroPreenchido;
-	private ConfiguracoesDoTabuleiro configuracoesDoTabuleiro;
 	
-	public Tabuleiro(String[][] tabuleiroPreenchido, ConfiguracoesDoTabuleiro configuracoesDoTabuleiro) {
+	public Tabuleiro(String[][] tabuleiroPreenchido) {
 		super();
 		this.tabuleiroPreenchido = retiraEspacosNullDoTabuleiro(tabuleiroPreenchido);
-		this.configuracoesDoTabuleiro = configuracoesDoTabuleiro;
 	}
 	
 	private String[][] retiraEspacosNullDoTabuleiro(String[][] tabuleiroPreenchido) {
@@ -25,10 +23,6 @@ public class Tabuleiro {
 
 	public String[][] getTabuleiroPreenchido() {
 		return tabuleiroPreenchido;
-	}
-	
-	public ConfiguracoesDoTabuleiro getConfiguracoesDoTabuleiro() {
-		return configuracoesDoTabuleiro;
 	}
 	
 }

@@ -1,7 +1,5 @@
 package tabuleiro.infraestrutura.visualizacao.console;
 
-import java.util.Scanner;
-
 import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 import tabuleiro.dominio.Tabuleiro;
@@ -9,7 +7,7 @@ import tabuleiro.infraestrutura.visualizacao.console.exception.SaindoDoSistemaEx
 
 public class ViewConsole implements View {
 
-	private Scanner digitacaoDoUsuario;
+	private EntradaDoUsuario entradaDoUsuario = new EntradaDoUsuario();
 	
 	private final String SAIR = "sair";
 	private final String DIVISAO_DO_TABULEIRO = "|";
@@ -18,7 +16,6 @@ public class ViewConsole implements View {
 	public ConfiguracoesDoTabuleiro defineConfiguracoesDoTabuleiro() {
 		try {
 			System.out.println("BEM-VINDO!! Para encerrar o sistema, digite sair");
-			this.digitacaoDoUsuario = new Scanner(System.in);
 			int tamanhoDoTabuleiro = pegaTamanhoDoTabuleiro();
 			int quantidadeDeRainhas = pegaQuantidadeDeRainhas();
 			return new ConfiguracoesDoTabuleiro(tamanhoDoTabuleiro, quantidadeDeRainhas);			
@@ -27,7 +24,7 @@ public class ViewConsole implements View {
 			return new ConfiguracoesDoTabuleiro(0, 0);
 		} 
 		finally {
-			this.digitacaoDoUsuario.close();
+			this.entradaDoUsuario.fechaConexao();
 		}
 	}
 
@@ -44,7 +41,7 @@ public class ViewConsole implements View {
 		String digitado = "";
 		try{
 			System.out.print(mensagem);
-			digitado = this.digitacaoDoUsuario.nextLine();
+			digitado = this.entradaDoUsuario.executa();
 			valor = Integer.parseInt(digitado);
 			if(valor <= 1) {
 				System.out.println("ERRO! Digite um numero MAIOR que 1");
