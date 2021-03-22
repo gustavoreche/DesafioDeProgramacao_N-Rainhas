@@ -1,7 +1,8 @@
 package tabuleiro;
 
+import tabuleiro.aplicacao.ForneceInformacoes;
+import tabuleiro.aplicacao.RecebeDados;
 import tabuleiro.aplicacao.regra.RegraDoTabuleiro;
-import tabuleiro.aplicacao.visualizacao.View;
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 import tabuleiro.dominio.Tabuleiro;
 
@@ -10,11 +11,11 @@ public class IniciaAplicacao {
 	private ConfiguracoesDoTabuleiro configuracoesDoTabuleiro;
 	private Tabuleiro tabuleiro;
 	
-	public void executa(View view, RegraDoTabuleiro regraDoTabuleiro) {
-		this.configuracoesDoTabuleiro = view.defineConfiguracoesDoTabuleiro();
+	public void executa(RecebeDados recebeDados, RegraDoTabuleiro regraDoTabuleiro, ForneceInformacoes forneceInformacoes) {
+		this.configuracoesDoTabuleiro = recebeDados.defineConfiguracoesDoTabuleiro();
 		this.tabuleiro = regraDoTabuleiro.cria(this.configuracoesDoTabuleiro);
-		view.informaSeTeveNumeroDeRainhasEmExcesso(this.configuracoesDoTabuleiro);
-		view.exibeTabuleiro(this.tabuleiro);
+		forneceInformacoes.informaSeTeveNumeroDeRainhasEmExcesso(this.configuracoesDoTabuleiro);
+		forneceInformacoes.exibeTabuleiro(this.tabuleiro);
 	}
 	
 	public ConfiguracoesDoTabuleiro getConfiguracoesDoTabuleiro() {

@@ -1,11 +1,10 @@
-package tabuleiro.aplicacao.visualizacao;
+package tabuleiro.aplicacao;
 
 import tabuleiro.dominio.ConfiguracoesDoTabuleiro;
 import tabuleiro.dominio.Tabuleiro;
 
-public interface View {
+public interface ForneceInformacoes {
 	
-	ConfiguracoesDoTabuleiro defineConfiguracoesDoTabuleiro();
 	void exibeTabuleiro(Tabuleiro tabuleiro);
 	void informaSeTeveNumeroDeRainhasEmExcesso(ConfiguracoesDoTabuleiro configuracoesDoTabuleiro);
 }

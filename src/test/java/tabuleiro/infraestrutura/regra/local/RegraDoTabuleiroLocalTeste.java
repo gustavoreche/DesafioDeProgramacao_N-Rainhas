@@ -13,7 +13,8 @@ import org.mockito.MockitoAnnotations;
 
 import tabuleiro.IniciaAplicacao;
 import tabuleiro.infraestrutura.visualizacao.console.EntradaDoUsuario;
-import tabuleiro.infraestrutura.visualizacao.console.ViewConsole;
+import tabuleiro.infraestrutura.visualizacao.console.RecebeDadosViaConsole;
+import tabuleiro.infraestrutura.visualizacao.console.ForneceDadosViaConsole;
 
 public class RegraDoTabuleiroLocalTeste {
 	
@@ -21,7 +22,10 @@ public class RegraDoTabuleiroLocalTeste {
 	private RegraDoTabuleiroLocal regraDoTabuleiroLocal = new RegraDoTabuleiroLocal();
 	
 	@InjectMocks
-	private ViewConsole view = new ViewConsole();
+	private RecebeDadosViaConsole recebeDados = new RecebeDadosViaConsole();
+	
+	@InjectMocks
+	private ForneceDadosViaConsole forneceDados = new ForneceDadosViaConsole();
 	
 	@InjectMocks
 	private IniciaAplicacao iniciaAplicacao = new IniciaAplicacao();
@@ -57,7 +61,7 @@ public class RegraDoTabuleiroLocalTeste {
 		Mockito.when(this.entradaDoUsuario.executa())
 			.thenReturn(TAMANHO_DO_TABULEIRO, QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal, this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -70,7 +74,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(TAMANHO_DO_TABULEIRO_RECUSADO, TAMANHO_DO_TABULEIRO,
 					QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -83,7 +87,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(TAMANHO_DO_TABULEIRO,
 					QUANTIDADE_DE_RAINHA_RECUSADA, QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -96,7 +100,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(TAMANHO_DO_TABULEIRO_RECUSADO, TAMANHO_DO_TABULEIRO,
 					QUANTIDADE_DE_RAINHA_RECUSADA, QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -108,7 +112,7 @@ public class RegraDoTabuleiroLocalTeste {
 		Mockito.when(this.entradaDoUsuario.executa())
 			.thenReturn(SAIR_DO_SISTEMA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TABULEIRO_NAO_CONFIGURADO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(TABULEIRO_NAO_CONFIGURADO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -120,7 +124,7 @@ public class RegraDoTabuleiroLocalTeste {
 		Mockito.when(this.entradaDoUsuario.executa())
 			.thenReturn(TAMANHO_DO_TABULEIRO, SAIR_DO_SISTEMA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TABULEIRO_NAO_CONFIGURADO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(TABULEIRO_NAO_CONFIGURADO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -133,7 +137,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(DIGITA_LETRA, TAMANHO_DO_TABULEIRO,
 					QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -146,7 +150,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(TAMANHO_DO_TABULEIRO,
 					DIGITA_LETRA, QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -159,7 +163,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(DIGITA_LETRA, TAMANHO_DO_TABULEIRO,
 					DIGITA_LETRA, QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertEquals(QUANTIDADE_DE_RAINHA, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getQuantidadeDeRainhas()));
@@ -172,7 +176,7 @@ public class RegraDoTabuleiroLocalTeste {
 			.thenReturn(TAMANHO_DO_TABULEIRO,
 					QUANTIDADE_DE_RAINHA_EXCEDIDA, QUANTIDADE_DE_RAINHA);
 		
-		this.iniciaAplicacao.executa(this.view, this.regraDoTabuleiroLocal);
+		this.iniciaAplicacao.executa(this.recebeDados, this.regraDoTabuleiroLocal,  this.forneceDados);
 		
 		assertEquals(TAMANHO_DO_TABULEIRO, String.valueOf(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().getTamanhoDoTabuleiro()));
 		assertTrue(this.iniciaAplicacao.getConfiguracoesDoTabuleiro().isNumeroDeRainhasExcedido());
